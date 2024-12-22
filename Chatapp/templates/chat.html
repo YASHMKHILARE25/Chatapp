@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <!-- Corrected the link to CSS -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>ChatApp</h2>
+            </div>
+            <ul class="channels">
+                <li class="active">General</li>
+                <li>Video Call</li>
+                <li>Audio Call</li>
+                <li>Proffesional</li>
+            </ul>
+            <button class="logout-btn">Logout</button>
+        </div>
+
+        <!-- Main Chat Window -->
+        <div class="chat-window">
+            <div class="header">
+                <h2>Chat Room - General</h2>
+            </div>
+            <div class="messages" id="messages"></div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type a message">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+
+        socket.on('message', function(msg){
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.innerHTML = `<strong>${msg.username}:</strong> ${msg.msg}`;
+            document.getElementById('messages').appendChild(messageDiv);
+        });
+
+        function sendMessage() {
+            var message = document.getElementById('messageInput').value;
+            socket.send(message);
+            document.getElementById('messageInput').value = '';
+        }
+    </script>
+</body>
+</html>
